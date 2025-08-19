@@ -1,0 +1,33 @@
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+const frases = [
+  'F1',
+  'F2',
+  'F3',
+  'F4',
+  'F5',
+];
+
+export default function App() {
+  const [frase, setFrase] = useState('');
+
+  const novaFrase = () => {
+    const index = Math.floor(Math.random() * frases.length);
+    setFrase(frases[index]);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Frases Aleatórias</Text>
+      <Text style={styles.frase}>{frase}</Text>
+      <Button title="Nova Frase" onPress={novaFrase} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
+  titulo: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
+  frase: { fontSize: 18, marginBottom: 20, textAlign: 'center' },
+});
