@@ -1,0 +1,44 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [n1, setN1] = useState('');
+  const [n2, setN2] = useState('');
+  const [resultado, setResultado] = useState(null);
+
+  const calcular = (operacao) => {
+    const a = parseFloat(n1);
+    const b = parseFloat(n2);
+    if (isNaN(a) || isNaN(b)) return;
+
+    switch (operacao) {
+      case '+': setResultado(a + b); break;
+      case '-': setResultado(a - b); break;
+      case '*': setResultado(a * b); break;
+      case '/': setResultado(b !== 0 ? a / b : 'Erro'); break;
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Calculadora 🧮</Text>
+      <TextInput style={styles.input} keyboardType="numeric" placeholder="Número 1" value={n1} onChangeText={setN1} />
+      <TextInput style={styles.input} keyboardType="numeric" placeholder="Número 2" value={n2} onChangeText={setN2} />
+      <View style={styles.botoes}>
+        <Button title="+" onPress={() => calcular('+')} />
+        <Button title="-" onPress={() => calcular('-')} />
+        <Button title="×" onPress={() => calcular('*')} />
+        <Button title="÷" onPress={() => calcular('/')} />
+      </View>
+      {resultado !== null && <Text style={styles.resultado}>Resultado: {resultado}</Text>}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  titulo: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  botoes: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 },
+  resultado: { fontSize: 20, textAlign: 'center' },
+});
