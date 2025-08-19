@@ -1,0 +1,117 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+
+export default function App() {
+  const [nome, setNome] = useState('');
+  const [especie, setEspecie] = useState('');
+  const [idade, setIdade] = useState('');
+  const [pets, setPets] = useState([]);
+
+  const adicionarPet = () => {
+    if (!nome || !especie || !idade) {
+      Alert.alert('Erro', 'Preencha todos os campos.');
+      return;
+    }
+
+    const novoPet = {
+      id: Date.now().toString(),
+      nome,
+      especie,
+      idade: parseInt(idade),
+    };
+
+    setPets([...pets, novoPet]);
+    setNome('');
+    setEspecie('');
+    setIdade('');
+  };
+
+  const removerPet = (id) => {
+    setPets(pets.filter(pet => pet.id !== id));
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Cadastro de Pets </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome do Pet"
+        value={nome}
+        onChangeText={setNome}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Espécie"
+        value={especie}
+        onChangeText={setEspecie}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Idade"
+        value={idade}
+        onChangeText={setIdade}
+        keyboardType="numeric"
+      />
+
+      <Button title="Cadastrar Pet" onPress={adicionarPet} />
+
+      <FlatList
+        data={pets}
+        keyExtractor={(item) => item.id}
+        style={{ marginTop: 20 }}
+        ListEmptyComponent={<Text>Nenhum pet cadastrado.</Text>}
+        renderItem={({ item }) => (
+          <View style={styles.pet}>
+            <Text>{item.nome} ({item.especie}) - {item.idade} anos</Text>
+            <TouchableOpacity onPress={() => removerPet(item.id)}>
+              <Text style={styles.remover}>Remover</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 40,
+    backgroundColor: '#fff',
+  },
+  titulo: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#bbb',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  pet: {
+    backgroundColor: '#eef',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  remover: {
+    color: 'red',
+    fontWeight: 'bold',
+  },
+});
