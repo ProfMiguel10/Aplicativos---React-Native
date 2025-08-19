@@ -1,0 +1,26 @@
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [hora, setHora] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHora(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Relógio</Text>
+      <Text style={styles.hora}>{hora.toLocaleTimeString()}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  titulo: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
+  hora: { fontSize: 48, fontWeight: 'bold' },
+});
