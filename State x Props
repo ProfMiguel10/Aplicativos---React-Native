@@ -1,0 +1,53 @@
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+/* =========================
+   Componente FILHO
+   Recebe dados via PROPS
+========================= */
+function TemperatureDisplay(props) {
+  return (
+    <Text style={styles.text}>
+      🌡️ Temperatura recebida: {props.value}°C
+    </Text>
+  );
+}
+
+/* =========================
+   Componente PAI
+   Controla o STATE
+========================= */
+export default function App() {
+  const [temperature, setTemperature] = useState(25);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Exemplo: State x Props</Text>
+
+      {/* Passando STATE para o FILHO via PROPS */}
+      <TemperatureDisplay value={temperature} />
+
+      <Button
+        title="Aumentar temperatura"
+        onPress={() => setTemperature(prev => prev + 1)}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  title: {
+    fontSize: 22,
+    marginBottom: 20,
+    fontWeight: 'bold'
+  },
+  text: {
+    fontSize: 18,
+    marginBottom: 20
+  }
+});
