@@ -1,0 +1,32 @@
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
+
+export default function App() {
+  const [sugestao, setSugestao] = useState('');
+
+  function escolherRoupa(clima) {
+    const roupasPorClima = {
+      frio: 'Casaco e calça comprida',
+      calor: 'Camiseta e shorts - Praia',
+      chuva: 'Capa de chuva e botas',
+      nublado: 'Blusa leve e calça'
+    };
+    setSugestao(roupasPorClima[clima]);
+  }
+
+  return (
+    <View style={{ padding: 20 }}>
+      {sugestao ? (
+        <Text style={{ fontSize: 18 }}>Sugestão de roupa: {sugestao}</Text>
+      ) : (
+        <>
+          <Text style={{ fontSize: 18 }}>Qual está o clima hoje?</Text>
+          <Button title="Frio" onPress={() => escolherRoupa('frio')} />
+          <Button title="Calor" onPress={() => escolherRoupa('calor')} />
+          <Button title="Chuva" onPress={() => escolherRoupa('chuva')} />
+          <Button title="Nublado" onPress={() => escolherRoupa('nublado')} />
+        </>
+      )}
+    </View>
+  );
+}
