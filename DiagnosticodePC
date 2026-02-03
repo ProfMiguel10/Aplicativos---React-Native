@@ -1,0 +1,34 @@
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
+export default function App() {
+  const [solucao, setSolucao] = useState('');
+  const verificarProblema = (problema) => {
+    const solucoes = {
+      nao_liga: 'Verifique o cabo de energia e a fonte.',
+      tela_azul: 'Reinicie o sistema.',
+      lento: 'Faça uma limpeza de disco.',
+      internet: 'Reinicie o roteador.'
+    };
+    setSolucao(solucoes[problema]);
+  };
+  return (
+    <View style={{ padding: 20 }}>
+      {solucao ? (
+        <Text style={{ fontSize: 18 }}>Solução: {solucao}</Text>
+      ) : (
+        <>
+          <Text style={{ fontSize: 18 }}>
+            Qual problema você está enfrentando?
+          </Text>
+
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            <Button title="Não liga" onPress={() => verificarProblema('nao_liga')} />
+            <Button title="Tela azul" onPress={() => verificarProblema('tela_azul')} />
+            <Button title="Computador lento" onPress={() => verificarProblema('lento')} />
+            <Button title="Problema de internet" onPress={() => verificarProblema('internet')} />
+          </View>
+        </>
+      )}
+    </View>
+  );
+}
