@@ -1,0 +1,94 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [cep, setCep] = useState('');
+  const [logradouro, setLogradouro] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [uf, setUf] = useState('');
+
+  const buscarCep = async () => {
+    if (cep.length !== 8) return;
+
+    const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const data = await response.json();
+
+    if (!data.erro) {
+      setLogradouro(data.logradouro || '');
+      setBairro(data.bairro || '');
+      setCidade(data.localidade || '');
+      setUf(data.uf || '');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Consulta de CEP</Text>
+
+      <Text style={styles.label}>CEP</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Digite o CEP"
+        keyboardType="numeric"
+        value={cep}
+        onChangeText={text => setCep(text.replace('-', ''))}
+      />
+
+      <Button title="Buscar CEP" onPress={buscarCep} />
+
+      <Text style={styles.label}>Rua</Text>
+      <TextInput
+        style={styles.input}
+        value={logradouro}
+        onChangeText={setLogradouro}
+      />
+
+      <Text style={styles.label}>Bairro</Text>
+      <TextInput
+        style={styles.input}
+        value={bairro}
+        onChangeText={setBairro}
+      />
+
+      <Text style={styles.label}>Cidade</Text>
+      <TextInput
+        style={styles.input}
+        value={cidade}
+        onChangeText={setCidade}
+      />
+
+      <Text style={styles.label}>Estado</Text>
+      <TextInput
+        style={styles.input}
+        value={uf}
+        onChangeText={setUf}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center'
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  label: {
+    marginTop: 10,
+    fontSize: 16
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#999',
+    padding: 10,
+    marginTop: 5,
+    borderRadius: 5
+  }
+});
