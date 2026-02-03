@@ -7,8 +7,8 @@ export default function App() {
       acao: 'Vingadores: Ultimato',
       drama: 'A Vida é Bela',
       comedia: 'O Auto da Compadecida',
-      animacao: 'Procurando Nemo',
-      terror: 'Invocação do Mal'
+      animacao: 'Toy Store',
+      terror: 'Five Nights at Freddy'
     };
     setRecommendation(movies[genre]);
   };
