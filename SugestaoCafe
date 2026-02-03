@@ -1,0 +1,47 @@
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
+export default function App() {
+  const [cafe, setCafe] = useState('');
+  const sugerirCafe = (humor) => {
+    const opcoes = {
+      cansado: 'Expresso',
+      animado: 'Cappuccino',
+      relaxado: 'Latte',
+      concentrado: 'Americano'
+    };
+    setCafe(opcoes[humor]);
+  };
+  return (
+    <View style={{ padding: 20 }}>
+      {cafe ? (
+        <Text style={{ fontSize: 18 }}>
+          Sugestão de café: {cafe}
+        </Text>
+      ) : (
+        <>
+          <Text style={{ fontSize: 18 }}>
+            Como você está se sentindo?
+          </Text>
+          <Button
+            title="Cansado"
+            onPress={() => sugerirCafe('cansado')}
+          />
+          <Button
+            title="Animado"
+            onPress={() => sugerirCafe('animado')}
+          />
+          <Button
+            title="Relaxado"
+            onPress={() => sugerirCafe('relaxado')}
+          />
+          <Button
+            title="Preciso focar"
+            onPress={() => sugerirCafe('concentrado')}
+          />
+        </>
+      )}
+    </View>
+  );
+}
+
+
