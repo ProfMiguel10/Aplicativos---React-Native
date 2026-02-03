@@ -1,0 +1,31 @@
+import React, { useState } from 'react';
+import { View, Text, Button } from 'react-native';
+export default function App() {
+  const [recommendation, setRecommendation] = useState('');
+  const suggestMovie = (genre) => {
+    const movies = {
+      acao: 'Vingadores: Ultimato',
+      drama: 'A Vida é Bela',
+      comedia: 'O Auto da Compadecida',
+      animacao: 'Procurando Nemo',
+      terror: 'Invocação do Mal'
+    };
+    setRecommendation(movies[genre]);
+  };
+  return (
+    <View style={{ padding: 20 }}>
+      {recommendation ? (
+        <Text style={{ fontSize: 18 }}>Filme recomendado: {recommendation}</Text>
+      ) : (
+        <>
+          <Text style={{ fontSize: 18 }}>Qual gênero você prefere?</Text>
+          <Button title="Ação" onPress={() => suggestMovie('acao')} />
+          <Button title="Drama" onPress={() => suggestMovie('drama')} />
+          <Button title="Comédia" onPress={() => suggestMovie('comedia')} />
+          <Button title="Animação" onPress={() => suggestMovie('animacao')} />
+          <Button title="Terror" onPress={() => suggestMovie('terror')} />
+        </>
+      )}
+    </View>
+  );
+}
