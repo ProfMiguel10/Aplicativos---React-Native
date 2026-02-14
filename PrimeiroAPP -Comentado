@@ -1,0 +1,44 @@
+const styles = StyleSheet.create({
+// Cria um objeto de estilos usando StyleSheet
+
+  container: {
+    // Estilo da View principal
+
+    flex: 1, 
+    // Faz a View ocupar todo o espaço disponível da tela
+
+    backgroundColor: '#fff',
+    // Define a cor de fundo como branco
+
+    alignItems: 'center', 
+    // Centraliza os itens horizontalmente
+
+    justifyContent: 'center', 
+    // Centraliza os itens verticalmente
+  },
+
+  titulo: {
+    // Estilo do texto "Olá!"
+
+    fontSize: 24,
+    // Define o tamanho da fonte
+
+    fontWeight: 'bold',
+    // Deixa o texto em negrito
+
+    color: '#222',
+    // Define a cor do texto (cinza escuro)
+  },
+
+  subtitulo: {
+    // Estilo do texto "Exemplo"
+
+    fontSize: 12,
+    // Define o tamanho da fonte menor
+
+    color: '#777',
+    // Define a cor do texto (cinza claro)
+  },
+
+});
+// Finaliza a criação dos estilos
