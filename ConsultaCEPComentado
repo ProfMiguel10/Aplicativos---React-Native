@@ -1,0 +1,130 @@
+// Importa o React, useState para estado do componente
+import React, { useState } from 'react';
+
+// Importa componentes do React Native para tela, textos, inputs, botões, estilos e alertas
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+// Componente principal do aplicativo
+export default function App() {
+  
+  // Estado que guarda o CEP digitado pelo usuário
+  const [cep, setCep] = useState('');
+
+  // Estado que guarda os dados do endereço retornados pela API
+  const [address, setAddress] = useState(null);
+
+  // Função assíncrona para consultar o CEP na API ViaCEP
+  const fetchCep = async () => {
+    
+    // Validação: verifica se o CEP está vazio ou não tem 8 caracteres
+    if (cep.trim() === '' || cep.length !== 8) {
+      Alert.alert('Erro', 'Digite um CEP válido com 8 números'); // Mostra alerta de erro
+      return; // Sai da função
+    }
+
+    try {
+      // Faz a requisição para a API ViaCEP com o CEP informado
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      
+      // Converte a resposta para JSON
+      const data = await response.json();
+
+      // Verifica se a API retornou erro (CEP não encontrado)
+      if (data.erro) {
+        Alert.alert('Erro', 'CEP não encontrado'); // Mostra alerta
+        setAddress(null); // Limpa o estado de endereço
+      } else {
+        setAddress(data); // Atualiza o estado com os dados do endereço
+      }
+
+    } catch (error) {
+      // Caso ocorra algum erro na requisição (ex: internet)
+      Alert.alert('Erro', 'Não foi possível consultar o CEP');
+      setAddress(null); // Limpa o estado de endereço
+    }
+  };
+
+  return (
+    // View principal que envolve toda a tela
+    <View style={styles.container}>
+
+      {/* Título do app */}
+      <Text style={styles.title}>Consulta de CEP</Text>
+
+      {/* Input de texto para o usuário digitar o CEP */}
+      <TextInput
+        style={styles.input} // Aplica estilo
+        placeholder="Digite o CEP (apenas números)" // Texto de ajuda
+        value={cep} // Valor do input vinculado ao estado
+        onChangeText={setCep} // Atualiza o estado conforme o usuário digita
+        keyboardType="numeric" // Mostra teclado numérico
+        maxLength={8} // Limita a 8 caracteres
+      />
+
+      {/* Botão que dispara a consulta do CEP */}
+      <TouchableOpacity style={styles.button} onPress={fetchCep}>
+        <Text style={styles.buttonText}>Consultar</Text>
+      </TouchableOpacity>
+
+      {/* Exibe os dados do endereço somente se o estado address não for nulo */}
+      {address && (
+        <View style={styles.result}>
+          <Text style={styles.text}><Text style={styles.bold}>CEP:</Text> {address.cep}</Text>
+          <Text style={styles.text}><Text style={styles.bold}>Logradouro:</Text> {address.logradouro}</Text>
+          <Text style={styles.text}><Text style={styles.bold}>Bairro:</Text> {address.bairro}</Text>
+          <Text style={styles.text}><Text style={styles.bold}>Cidade:</Text> {address.localidade}</Text>
+          <Text style={styles.text}><Text style={styles.bold}>Estado:</Text> {address.uf}</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+// Estilos do aplicativo usando StyleSheet
+const styles = StyleSheet.create({
+  container:{
+    flex:1, // Ocupa toda a tela
+    padding:20, // Espaçamento interno
+    justifyContent:'center', // Centraliza verticalmente
+    backgroundColor:'#e0f2f1' // Fundo azul claro
+  },
+  title:{
+    fontSize:28, // Tamanho da fonte
+    fontWeight:'bold', // Negrito
+    textAlign:'center', // Centraliza horizontalmente
+    marginBottom:20, // Espaço abaixo
+    color:'#00796b' // Cor verde
+  },
+  input:{
+    borderWidth:1, // Borda do input
+    borderColor:'#00796b', // Cor da borda
+    borderRadius:10, // Bordas arredondadas
+    padding:10, // Espaçamento interno
+    marginBottom:10, // Espaço abaixo
+    fontSize:16 // Tamanho da fonte
+  },
+  button:{
+    backgroundColor:'#00796b', // Cor do botão
+    padding:15, // Espaçamento interno
+    borderRadius:10, // Bordas arredondadas
+    marginBottom:20, // Espaço abaixo
+    alignItems:'center' // Centraliza texto do botão
+  },
+  buttonText:{
+    color:'#fff', // Cor do texto
+    fontSize:18, // Tamanho da fonte
+    fontWeight:'bold' // Negrito
+  },
+  result:{
+    backgroundColor:'#ffffff', // Fundo branco
+    padding:15, // Espaçamento interno
+    borderRadius:10 // Bordas arredondadas
+  },
+  text:{
+    fontSize:16, // Tamanho da fonte
+    marginBottom:5 // Espaço entre linhas
+  },
+  bold:{
+    fontWeight:'bold' // Texto em negrito
+  }
+});
