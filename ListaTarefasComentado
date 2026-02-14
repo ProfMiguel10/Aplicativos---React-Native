@@ -1,0 +1,48 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [task, setTask] = useState(''); // Estado para o input
+  const [tasks, setTasks] = useState([]); // Estado para a lista de tarefas
+
+  // Função para adicionar tarefa à lista
+  const addTask = () => {
+    if(task.trim() !== ''){ // Verifica se não está vazio
+      setTasks([...tasks, { id: Date.now().toString(), name: task }]); // Adiciona à lista
+      setTask(''); // Limpa o input
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Input de texto */}
+      <TextInput 
+        style={styles.input} 
+        placeholder="Nova tarefa" 
+        value={task} 
+        onChangeText={setTask} // Atualiza o estado conforme digita
+      />
+
+      {/* Botão para adicionar tarefa */}
+      <TouchableOpacity style={styles.button} onPress={addTask}>
+        <Text style={styles.buttonText}>Adicionar</Text>
+      </TouchableOpacity>
+
+      {/* Lista de tarefas */}
+      <FlatList 
+        data={tasks} // Lista de dados
+        keyExtractor={item => item.id} // Chave única
+        renderItem={({item}) => <Text style={styles.item}>{item.name}</Text>} // Como cada item será exibido
+        ListEmptyComponent={<Text style={{color:'#777'}}>Nenhuma tarefa</Text>} // Se a lista estiver vazia
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container:{ flex:1, padding:20 },
+  input:{ borderWidth:1, borderColor:'#333', padding:10, borderRadius:10, marginBottom:10 },
+  button:{ backgroundColor:'#6200ee', padding:10, borderRadius:10, marginBottom:10 },
+  buttonText:{ color:'#fff', fontWeight:'bold', textAlign:'center' },
+  item:{ padding:10, fontSize:18, borderBottomWidth:1, borderColor:'#ccc' }
+});
