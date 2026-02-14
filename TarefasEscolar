@@ -1,0 +1,165 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
+
+// Componente principal do aplicativo escolar
+export default function App() {
+
+  // Estado para o nome da tarefa digitada
+  const [taskName, setTaskName] = useState('');
+
+  // Estado para a lista de tarefas (cada item tem id, nome e status de concluído)
+  const [tasks, setTasks] = useState([]);
+
+  // Função para adicionar uma nova tarefa
+  const addTask = () => {
+    if (taskName.trim() === '') {
+      Alert.alert('Erro', 'Digite o nome da tarefa'); // Valida input vazio
+      return;
+    }
+
+    // Cria um objeto tarefa
+    const newTask = {
+      id: Date.now().toString(), // id único baseado no timestamp
+      name: taskName,
+      done: false // Inicialmente não concluída
+    };
+
+    // Adiciona à lista de tarefas
+    setTasks([...tasks, newTask]);
+
+    // Limpa o input
+    setTaskName('');
+  };
+
+  // Função para marcar/desmarcar uma tarefa como concluída
+  const toggleDone = (id) => {
+    const updatedTasks = tasks.map(task => {
+      if (task.id === id) {
+        return {...task, done: !task.done}; // Alterna o status done
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  };
+
+  // Função para remover uma tarefa
+  const removeTask = (id) => {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks);
+  };
+
+  return (
+    <View style={styles.container}>
+
+      {/* Título do app */}
+      <Text style={styles.title}>📚 App Escolar</Text>
+
+      {/* Input para adicionar nova tarefa */}
+      <TextInput 
+        style={styles.input}
+        placeholder="Digite a tarefa"
+        value={taskName}
+        onChangeText={setTaskName} // Atualiza o estado conforme digita
+      />
+
+      {/* Botão para adicionar tarefa */}
+      <TouchableOpacity style={styles.addButton} onPress={addTask}>
+        <Text style={styles.buttonText}>Adicionar</Text>
+      </TouchableOpacity>
+
+      {/* Lista de tarefas */}
+      <FlatList 
+        data={tasks} // Lista de dados
+        keyExtractor={item => item.id} // Chave única
+        renderItem={({item}) => (
+          <View style={styles.taskItem}>
+            {/* Botão para alternar concluída */}
+            <TouchableOpacity onPress={() => toggleDone(item.id)}>
+              <Text style={[styles.taskText, item.done && styles.doneText]}>
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Botão para remover tarefa */}
+            <TouchableOpacity onPress={() => removeTask(item.id)}>
+              <Text style={styles.removeText}>❌</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        ListEmptyComponent={<Text style={styles.empty}>Nenhuma tarefa adicionada</Text>}
+      />
+
+      {/* Resumo do dia */}
+      <Text style={styles.summary}>
+        Total: {tasks.length} | Concluídas: {tasks.filter(t => t.done).length}
+      </Text>
+
+    </View>
+  );
+}
+
+// Estilos do app
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    padding:20,
+    backgroundColor:'#e3f2fd', // Fundo azul claro
+  },
+  title:{
+    fontSize:28,
+    fontWeight:'bold',
+    textAlign:'center',
+    marginBottom:20,
+    color:'#1565c0'
+  },
+  input:{
+    borderWidth:1,
+    borderColor:'#1565c0',
+    borderRadius:10,
+    padding:10,
+    marginBottom:10,
+    fontSize:16
+  },
+  addButton:{
+    backgroundColor:'#1565c0',
+    padding:15,
+    borderRadius:10,
+    marginBottom:20,
+    alignItems:'center'
+  },
+  buttonText:{
+    color:'#fff',
+    fontSize:18,
+    fontWeight:'bold'
+  },
+  taskItem:{
+    flexDirection:'row', // Linha com nome + botão remover
+    justifyContent:'space-between',
+    alignItems:'center',
+    backgroundColor:'#fff',
+    padding:10,
+    borderRadius:10,
+    marginBottom:10
+  },
+  taskText:{
+    fontSize:16,
+  },
+  doneText:{
+    textDecorationLine:'line-through', // Risca a tarefa concluída
+    color:'#4caf50'
+  },
+  removeText:{
+    fontSize:20
+  },
+  empty:{
+    textAlign:'center',
+    color:'#777',
+    marginTop:20
+  },
+  summary:{
+    marginTop:20,
+    textAlign:'center',
+    fontSize:16,
+    fontWeight:'bold'
+  }
+});
