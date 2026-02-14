@@ -1,0 +1,44 @@
+import React, { useState } from 'react'; // Importa React e o hook useState
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'; // Importa componentes do React Native
+
+export default function App() {
+  const [count, setCount] = useState(0); // Cria o estado do contador, inicializando em 0
+
+  // Função para definir a cor do número dependendo do valor
+  const getColor = () => {
+    if(count > 0) return 'green'; // Verde se positivo
+    if(count < 0) return 'red';   // Vermelho se negativo
+    return 'black';                // Preto se zero
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Mostra o valor do contador */}
+      <Text style={[styles.number, {color: getColor()}]}>{count}</Text>
+
+      {/* Botões para alterar o contador */}
+      <View style={styles.buttons}>
+        <TouchableOpacity style={styles.button} onPress={() => setCount(count - 1)}>
+          <Text style={styles.text}>-1</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => setCount(count + 1)}>
+          <Text style={styles.text}>+1</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => setCount(0)}>
+          <Text style={styles.text}>Zerar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+// Estilos do aplicativo
+const styles = StyleSheet.create({
+  container:{ flex:1, justifyContent:'center', alignItems:'center' }, // Centraliza tudo
+  number:{ fontSize:80, fontWeight:'bold', marginBottom:20 }, // Número grande
+  buttons:{ flexDirection:'row', gap:10 }, // Botões em linha com espaçamento
+  button:{ backgroundColor:'#6200ee', padding:15, borderRadius:10 }, // Estilo do botão
+  text:{ color:'#fff', fontSize:18, fontWeight:'bold' } // Texto do botão
+});
