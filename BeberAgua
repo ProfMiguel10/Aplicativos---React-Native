@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+export default function App() {
+  const [cups, setCups] = useState(0); // Estado do número de copos bebidos
+  const goal = 8; // Meta diária de copos
+
+  // Função chamada quando o usuário bebe um copo
+  const drinkWater = () => {
+    const newCups = cups + 1;
+    setCups(newCups);
+
+    // Verifica se atingiu a meta
+    if(newCups === goal){
+      Alert.alert('Parabéns!', 'Você atingiu sua meta diária de água 💧');
+    }
+  };
+
+  // Função para resetar o contador
+  const resetCups = () => {
+    setCups(0);
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Título do app */}
+      <Text style={styles.title}>💧 Beba Água!</Text>
+
+      {/* Exibe o número de copos bebidos */}
+      <Text style={styles.counter}>{cups} / {goal} copos</Text>
+
+      {/* Botão para beber água */}
+      <TouchableOpacity style={styles.button} onPress={drinkWater}>
+        <Text style={styles.buttonText}>Bebi um copo</Text>
+      </TouchableOpacity>
+
+      {/* Botão para resetar */}
+      <TouchableOpacity style={[styles.button, styles.resetButton]} onPress={resetCups}>
+        <Text style={styles.buttonText}>Zerar</Text>
+      </TouchableOpacity>
+
+      {/* Mensagem de incentivo */}
+      {cups < goal ? (
+        <Text style={styles.message}>Continue bebendo água 💦</Text>
+      ) : (
+        <Text style={styles.message}>Meta alcançada! Parabéns 🎉</Text>
+      )}
+    </View>
+  );
+}
+
+// Estilos
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#e0f7fa', // Fundo azul claro
+    padding:20
+  },
+  title:{
+    fontSize:32,
+    fontWeight:'bold',
+    marginBottom:30,
+    color:'#00796b'
+  },
+  counter:{
+    fontSize:28,
+    marginBottom:20,
+    color:'#004d40'
+  },
+  button:{
+    backgroundColor:'#00796b',
+    paddingHorizontal:30,
+    paddingVertical:15,
+    borderRadius:10,
+    marginVertical:10
+  },
+  resetButton:{
+    backgroundColor:'#c62828' // Vermelho para reset
+  },
+  buttonText:{
+    color:'#fff',
+    fontSize:18,
+    fontWeight:'bold'
+  },
+  message:{
+    marginTop:20,
+    fontSize:18,
+    color:'#004d40'
+  }
+});
