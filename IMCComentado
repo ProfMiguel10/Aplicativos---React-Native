@@ -1,0 +1,128 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
+// Componente principal do app
+export default function App() {
+
+  // Estado do peso em kg
+  const [weight, setWeight] = useState('');
+
+  // Estado da altura em metros
+  const [height, setHeight] = useState('');
+
+  // Estado do resultado do IMC
+  const [imc, setImc] = useState(null);
+
+  // Estado da classificação (baixo peso, normal, etc.)
+  const [classification, setClassification] = useState('');
+
+  // Função para calcular o IMC
+  const calculateIMC = () => {
+
+    // Valida se os campos estão preenchidos e são números
+    if (!weight || !height || isNaN(weight) || isNaN(height)) {
+      Alert.alert('Erro', 'Digite valores válidos para peso e altura');
+      return;
+    }
+
+    const w = parseFloat(weight);
+    const h = parseFloat(height);
+
+    const result = w / (h * h); // Fórmula do IMC
+    const rounded = result.toFixed(2); // Arredonda para 2 casas decimais
+    setImc(rounded);
+
+    // Classificação do IMC
+    if (result < 18.5) setClassification('Abaixo do peso');
+    else if (result < 25) setClassification('Peso normal');
+    else if (result < 30) setClassification('Sobrepeso');
+    else setClassification('Obesidade');
+  };
+
+  return (
+    <View style={styles.container}>
+
+      {/* Título do app */}
+      <Text style={styles.title}>🏋️ Calculadora de IMC</Text>
+
+      {/* Input do peso */}
+      <TextInput
+        style={styles.input}
+        placeholder="Peso (kg)"
+        value={weight}
+        onChangeText={setWeight}
+        keyboardType="numeric"
+      />
+
+      {/* Input da altura */}
+      <TextInput
+        style={styles.input}
+        placeholder="Altura (m)"
+        value={height}
+        onChangeText={setHeight}
+        keyboardType="numeric"
+      />
+
+      {/* Botão para calcular */}
+      <TouchableOpacity style={styles.button} onPress={calculateIMC}>
+        <Text style={styles.buttonText}>Calcular IMC</Text>
+      </TouchableOpacity>
+
+      {/* Exibe o resultado e classificação */}
+      {imc && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>Seu IMC: {imc}</Text>
+          <Text style={styles.resultText}>Classificação: {classification}</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+// Estilos do app
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+    padding:20,
+    justifyContent:'center',
+    backgroundColor:'#fff3e0'
+  },
+  title:{
+    fontSize:28,
+    fontWeight:'bold',
+    textAlign:'center',
+    marginBottom:20,
+    color:'#e65100'
+  },
+  input:{
+    borderWidth:1,
+    borderColor:'#e65100',
+    borderRadius:10,
+    padding:10,
+    marginBottom:10,
+    fontSize:16
+  },
+  button:{
+    backgroundColor:'#e65100',
+    padding:15,
+    borderRadius:10,
+    marginVertical:10,
+    alignItems:'center'
+  },
+  buttonText:{
+    color:'#fff',
+    fontSize:18,
+    fontWeight:'bold'
+  },
+  resultContainer:{
+    marginTop:20,
+    alignItems:'center'
+  },
+  resultText:{
+    fontSize:18,
+    fontWeight:'bold',
+    color:'#bf360c',
+    marginBottom:5
+  }
+});
+
